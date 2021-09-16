@@ -55,6 +55,5 @@ I am still new to coding in blockchain, and I need to investigate coding paradig
          * Player marketplace
          * Prizes based on weekly performance
          * Integration with real NFL teams
-
-    * https://decrypt.co/resources/sorare-beginners-guide-2021
+      * https://decrypt.co/resources/sorare-beginners-guide-2021
 
