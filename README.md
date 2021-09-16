@@ -25,65 +25,38 @@ I am still new to coding in blockchain, and I need to investigate coding paradig
 ### Idea: Ethereum Poker Game
 
     - Why? Because I enjoy poker and want to allow others to play on a decentralized platform
-
     - Technical requirements:
-
         - Simple and usable front-end
-
               - Multiple sockets that provide users with live information about money, cards, game state, and more
-
         - Encrypted game state: I cannot have access to other users' cards
-
-        - Instant/free game state updates: Required for the functionality of the app as a                        live, fast-moving game
-
+        - Instant/free game state updates: Required for the functionality of the app as a live, fast-moving game
         - Ability to cash in or cash out.
-
         - Ability to join unique game room with specific people.
-
     - Questions
-
           - Will this be for real ETH or just for play coins? 
-
           - How can the game state be updated fast and easily?
-
           - How can I effectively test the code for multiple users?
-
-
 
 ### Idea: Decentralized Job search platform
 
     - Why?
-
         - To guarantee applicants have employment history they purport
-
     - User Workflow
-
         - User completes employment specified at specific company (account) and company verifies their employment or rejects and alters the work they performed
-
         - User completes certification/degree from institution and institution verifies their degree
-
         - Built-in, secured tests offered to provide internal verification of quality
-
     - Use cases
-
-        - For job searchers: provides immediate database for current and former employees                           regarding job descriptions, pay estimates, and quality of job environment
-
-        - For employers: Ensures qualified applicants, speeds up process of choosing applicants,                   eliminates issue of reading resumes with embellished histories
+        - For job searchers: provides immediate database for current and former employees regarding job descriptions, pay estimates, and quality of job environment
+        - For employers: Ensures qualified applicants, speeds up process of choosing applicants, eliminates issue of reading resumes with embellished histories
 
 ### Idea: American Fantasy Football (To be fleshed out)
 
         - Why? American football is an untapped area for utilization of NFTs, team building, and betting
-
         - Potential capabilities:
-
             - Special editions of players
-
             - Unique team upgrades/ special combo multipliers
-
             - Player marketplace
-
             - Prizes based on weekly performance
-
             - Integration with real NFL teams
 
         - https://decrypt.co/resources/sorare-beginners-guide-2021
