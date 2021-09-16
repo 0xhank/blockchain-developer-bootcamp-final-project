@@ -23,11 +23,10 @@ I am still new to coding in blockchain, and I need to investigate coding paradig
 # Brainstorm
 
 ### Idea: Ethereum Poker Game
-
-    - Why? Because I enjoy poker and want to allow others to play on a decentralized platform
-    - Technical requirements:
-        - Simple and usable front-end
-              - Multiple sockets that provide users with live information about money, cards, game state, and more
+* Why? Because I enjoy poker and want to allow others to play on a decentralized platform
+    *  Technical requirements:
+        -  Simple and usable front-end
+            *  Multiple sockets that provide users with live information about money, cards, game state, and more
         - Encrypted game state: I cannot have access to other users' cards
         - Instant/free game state updates: Required for the functionality of the app as a live, fast-moving game
         - Ability to cash in or cash out.
