@@ -49,11 +49,11 @@ I am still new to coding in blockchain, and I need to investigate coding paradig
 
 ### Idea: American Fantasy Football (To be fleshed out)
    * Why? American football is an untapped area for utilization of NFTs, team building, and betting
-      * Potential capabilities:
-       * Special editions of players
-       * Unique team upgrades/ special combo multipliers
-       * Player marketplace
-       * Prizes based on weekly performance
-       * Integration with real NFL teams
-      * https://decrypt.co/resources/sorare-beginners-guide-2021
+   * Potential capabilities:
+      * Special editions of players
+      * Unique team upgrades/ special combo multipliers
+      * Player marketplace
+      * Prizes based on weekly performance
+      * Integration with real NFL teams
+   * https://decrypt.co/resources/sorare-beginners-guide-2021
 
