@@ -40,24 +40,24 @@ I am still new to coding in blockchain, and I need to investigate coding paradig
 ### Idea: Decentralized Job search platform
 
     - Why?
-        - To guarantee applicants have employment history they purport
+    - To guarantee applicants have employment history they purport
     - User Workflow
-        - User completes employment specified at specific company (account) and company verifies their employment or rejects and alters the work they performed
-        - User completes certification/degree from institution and institution verifies their degree
-        - Built-in, secured tests offered to provide internal verification of quality
+       - User completes employment specified at specific company (account) and company verifies their employment or rejects and alters the work they performed
+       - User completes certification/degree from institution and institution verifies their degree
+       - Built-in, secured tests offered to provide internal verification of quality
     - Use cases
-        - For job searchers: provides immediate database for current and former employees regarding job descriptions, pay estimates, and quality of job environment
-        - For employers: Ensures qualified applicants, speeds up process of choosing applicants, eliminates issue of reading resumes with embellished histories
+       - For job searchers: provides immediate database for current and former employees regarding job descriptions, pay estimates, and quality of job environment
+       - For employers: Ensures qualified applicants, speeds up process of choosing applicants, eliminates issue of reading resumes with embellished histories
 
 ### Idea: American Fantasy Football (To be fleshed out)
 
-        - Why? American football is an untapped area for utilization of NFTs, team building, and betting
-        - Potential capabilities:
-            - Special editions of players
-            - Unique team upgrades/ special combo multipliers
-            - Player marketplace
-            - Prizes based on weekly performance
-            - Integration with real NFL teams
+    - Why? American football is an untapped area for utilization of NFTs, team building, and betting
+    - Potential capabilities:
+      - Special editions of players
+      - Unique team upgrades/ special combo multipliers
+      - Player marketplace
+      - Prizes based on weekly performance
+      - Integration with real NFL teams
 
-        - https://decrypt.co/resources/sorare-beginners-guide-2021
+    - https://decrypt.co/resources/sorare-beginners-guide-2021
 
