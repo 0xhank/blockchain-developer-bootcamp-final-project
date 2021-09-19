@@ -1,9 +1,6 @@
 # Consensys Blockchain Bootcamp Final Project
 
-# Intro
-
-I am still new to coding in blockchain, and I need to investigate coding paradigms that are optimized for the platform and ones that are a less viable. As it stands, I'm not sure about the feasibility of real-time card games. Would each user need to complete a transaction just to, say, play a card in go fish? Additionally, I need to spend more time investigating issues with Web2 for some of the ideas I've come up with. Stay tuned for more robust and fully thought-out ideas.
-# Refresher: Pros and Cons of Web3
+## Refresher: Pros and Cons of Web3
 
 ### Pros
 
@@ -93,18 +90,18 @@ Online poker is hugely popular, but requires players to pay high fees for access
 
 
 
-# 2. Real-time execution
+### 2. Real-time execution
 
     An essential aspect of poker is it occurs in real time. Players often have a "shot clock" of time to make a play. Each player makes between one and ten plays, such as folding, calling, betting, or raising each hand. Since every play is stored on the blockchain, it is essential that each transaction is completed in 1-3 seconds and is gasless. This means the game itself must be hosted on a blockchain other than Ethereum, such as Polygon, Loom, or xDai. Perhaps it's possible to begin the game in Ethereum and host in-game transactions in another blockchain.
 
 
 
-# 3. Multiple "tables" capability
+### 3. Multiple "tables" capability
 
     A room is a private space on the blockchain that clients can access either with an access code. For multiple games can be played simultaneously, it is necessary for the Dapp to create a room, or in the case of poker, a table, for a new game.
 
 
 
-# 4. Usable front end
+### 4. Usable front end
 
     You can't have a good Dapp without some slick UX!
