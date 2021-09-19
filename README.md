@@ -1,8 +1,4 @@
-# Consensys Blockchain Bootcamp Final Project
-
-
-
-# Ethereum Poker
+# Consensys Blockchain Bootcamp Final Project: Blockchain Poker
 
 ## Problem
 
@@ -18,7 +14,7 @@ Online poker is hugely popular, but requires players to pay high fees for access
 
 ## Key Technical Challenges
 
-# 1. Zero Knowledge Proofs
+### 1. Zero Knowledge Proofs
 
     In poker, there is always information unavailable to any given player, such as other players' cards and the order of cards in the deck. However, the blockchain's state is available to all other users. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information.
 
