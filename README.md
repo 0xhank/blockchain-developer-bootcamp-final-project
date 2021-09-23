@@ -18,14 +18,17 @@ Online poker is hugely popular, but requires players to pay high fees for access
 
     In poker, there is always information unavailable to any given player, such as other players' cards and the order of cards in the deck. However, the blockchain's state is available to all other users. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information.
 
-### 2. Real-time execution
+### 2. Shuffling the deck
+
+    It's necessary to shuffle the deck to a completely random order unknown to all players. In typical programming languages, this is simple: the language itself typically has a randomize function built into its standard library. In Ethereum, however, it is considerably more difficult. Due to the Ethereum VM's deterministic nature, there are no good ways to produce randomness. Thus, a work-around must be produced.
+### 3. Real-time execution
 
     An essential aspect of poker is it occurs in real time. Players often have a "shot clock" of time to make a play. Each player makes between one and ten plays, such as folding, calling, betting, or raising each hand. Since every play is stored on the blockchain, it is essential that each transaction is completed in 1-3 seconds and is gasless. This means the game itself must be hosted on a blockchain other than Ethereum, such as Polygon, Loom, or xDai. Perhaps it's possible to begin the game in Ethereum and host in-game transactions in another blockchain.
 
-### 3. Multiple "tables" capability
+### 4. Multiple "tables" capability
 
     A room is a private space on the blockchain that clients can access either with an access code. For multiple games can be played simultaneously, it is necessary for the Dapp to create a room, or in the case of poker, a table, for a new game.
 
-### 4. Usable front end
+### 5. Usable front end
 
     You can't have a good Dapp without some slick UX!
