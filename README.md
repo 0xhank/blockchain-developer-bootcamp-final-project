@@ -10,7 +10,7 @@ Zero Knowledge Proofs are a cutting edge technology in the blockchain community.
 
 ### 1. Zero Knowledge Proofs
 
-    In poker, there is always information unavailable to any given player, such as other players' cards and the order of cards in the deck. However, the blockchain's state is available to all other users. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information.
+    In Stratego, there is always information unavailable to any given player, namely the pieces the other play holds. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information. Each team's piece arrangment will be kept locally, off chain, and each time they move, they will prove it is possible through a zero-knowledge proof.
 
 ### 2. Commit-Reveal Protocol
 
