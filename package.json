@@ -1,0 +1,23 @@
+{
+  "name": "blockchain-developer-bootcamp-final-project",
+  "version": "1.0.0",
+  "description": "Online poker is hugely popular, but requires players to pay high fees for access to online casinos. Cashing out can take multiple days, and there is often a lack of transparency about shady gambling sites. An open source blockchain poker game would solve many of these issues. Players could buy in instantly with their crypto, maintain anonymity, and not have to pay high fees. There would be complete transparency, giving power to players in an industry that is dominated by centralized casinos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henryacaron/blockchain-developer-bootcamp-final-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henryacaron/blockchain-developer-bootcamp-final-project/issues"
+  },
+  "homepage": "https://github.com/henryacaron/blockchain-developer-bootcamp-final-project#readme",
+  "devDependencies": {
+    "hardhat": "^2.6.4"
+  }
+}
