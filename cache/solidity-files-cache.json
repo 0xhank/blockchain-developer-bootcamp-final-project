@@ -36,8 +36,8 @@
       ]
     },
     "C:\\Users\\hanke\\OneDrive\\Documents\\github\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
-      "lastModificationDate": 1633629664382,
-      "contentHash": "d5e37929b80550d3320cfb757985de32",
+      "lastModificationDate": 1634286227846,
+      "contentHash": "686c2743a33099fb6901ea092be6dd7f",
       "sourceName": "contracts/Stratego.sol",
       "solcConfig": {
         "version": "0.7.3",

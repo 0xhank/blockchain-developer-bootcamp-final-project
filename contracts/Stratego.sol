@@ -40,12 +40,23 @@ contract Stratego {
       Phase currPhase;
       TileType[BOARDSIZE] board;
       Team turn;
+      uint8 attackerVal;
+      uint8 attackedVal;
+      uint redBoard;
+      uint blueBoard;
+      uint gameID;
       bool exists;
-      address winner;
+      
+      
     }
     
     mapping(uint => Game) games;
-    event boardState(TileType[BOARDSIZE] board);
+    
+    event currPhase (uint gameID, Phase curr);
+    
+    event gameState(address red, address blue, string boardString);
+    event piecesPlaced(uint gameID, address sender, uint64 board);
+    event battleLog(uint gameID, uint attackerLoc, uint attackedLoc);
     event logBoard(string boardString);
     event GameIDs(address from, uint gameID);
     
@@ -61,23 +72,54 @@ contract Stratego {
       game.red = msg.sender;
       game.turn = Team.Red;
       game.exists = true;
+      game.redBoard = 0;
+      game.gameID = gameID;
+      game.attackerLoc = 101;
+      game.attackedLoc = 101;
+      game.attackerVal = 0;
+      game.attackedVal = 0;
       n_games++;
-      console.log("Address, GameID is %s , %s", msg.sender, gameID);
-      
+     
 
       emit GameIDs(msg.sender, gameID);
     }
     
     function join(uint gameID) external {
       Game storage game = games[gameID];
-      require(game.exists && game.currPhase == Phase.Awaiting);
-      require(game.red != msg.sender);
+      require(game.exists && game.currPhase == Phase.Awaiting, "game not in waiting state");
+      require(game.red != msg.sender, "player already in game");
       game.blue = msg.sender;
       game.currPhase = Phase.Placement;
+      game.blueBoard = 0;
+
       n_activegames ++;
       game.board = createBoard(gameID);
+      // emit gameState(game.board);
+      emit gameState(game.red, game.blue, printBoard(gameID));
     }
     
+    function place(uint gameID, uint64 board) external {
+      Game storage game = games[gameID];
+      require(game.exists, "game doesn't exist");
+
+      require(game.currPhase == Phase.Placement, "game in wrong phase");
+      require(msg.sender == game.red || msg.sender == game.blue, "not playing");
+      if(msg.sender == game.red){
+        require(game.redBoard == 0, "Red pieces already set");
+        game.redBoard = board;
+      }
+      if(msg.sender == game.blue){
+        require(game.blueBoard == 0, "Blue pieces already set");
+        game.blueBoard = board;
+      }
+      emit piecesPlaced(gameID, msg.sender, board);
+      
+      if(game.blueBoard != 0 && game.redBoard != 0){
+        game.currPhase = Phase.Gameplay;
+      }
+      emit currPhase(gameID, game.currPhase);
+
+    }
     function createBoard(uint gameID) public returns (TileType[BOARDSIZE] memory) {
       Game storage game = games[gameID];
 
@@ -98,26 +140,98 @@ contract Stratego {
       game.board[47]= TileType.Blocked;
       game.board[56]= TileType.Blocked;
       game.board[57]= TileType.Blocked;
-      emit boardState(game.board);
+      emit logBoard(printBoard(game.gameID));
       return game.board;
     }
 
-    function coord2Idx(uint x, uint y) public pure returns (uint) {
-      return 10 * x + y;
+    function coord2Idx(uint x, uint y) public pure returns (uint8) {
+      return uint8(10 * x + y);
     }
     
-    function coord2Piece(uint x, uint y,uint gameID) public view returns (TileType){
+    function Idx2Coord(uint Idx) public pure returns(uint, uint) {
+      return(100 / Idx, 100 % Idx);
+    }
+    
+    function coord2Piece(uint gameID, uint x, uint y) public view returns (TileType){
       Game storage game = games[gameID];
 
       return game.board[coord2Idx(x,y)];
     }
-    
+
     function piece2Str(TileType piece) public pure returns (string memory) {
       if(piece == TileType.Empty) return "E";
       if (piece == TileType.Blocked) return "X";
       if (piece == TileType.RedPiece) return "R";
       return "B";
     }
+       
+    function battle(uint gameID, uint pieceVal) external {
+      Game storage game = games[gameID];
+      require(game.exists, "game doesn't exist");
+      require(game.currPhase == Phase.Battle, "not battling");
+      Team player = msg.sender == game.red ? Team.Red : Team.Blue;
+      if(player == game.turn){
+        require(game.attacked)
+      }
+      
+    }
+    function diff(uint x1, uint x2) private pure returns (uint) {
+      return x1 > x2 ? x1 - x2 : x2 - x1;
+    }
+    
+    function completeMove(Game storage game,
+                          TileType oldTile,
+                          TileType newTile,
+                          uint8 oldIdx,
+                          uint8 newIdx,
+                          TileType moverTile,
+                          Team currTurn
+                          ) 
+                            private {
+      require(currTurn == game.turn, "not your turn");
+      require(oldTile == moverTile, "cannot move that piece");
+      require(newTile != moverTile && newTile != TileType.Blocked, "cannot move there"); 
+      
+      uint diffX = diff(oldIdx / 10, newIdx / 10);
+      console.log("oldIdx: %s, newIdx: %s", oldIdx, newIdx);
+      uint diffY = diff(oldIdx % 10, newIdx % 10);
+      require((diffX == 0 && diffY == 1) || (diffX == 1 && diffY == 0), "cannot jump squares");
+      // no battle
+      if(newTile == TileType.Empty){
+        game.board[oldIdx] = TileType.Empty;
+        game.board[newIdx] = moverTile;
+        game.turn = currTurn == Team.Red ? Team.Blue : Team.Red;
+      } else {
+        // battle
+        game.currPhase == Phase.Battle;
+        emit battleLog(game.gameID, oldIdx, newIdx);
+      }      
+    }
+    
+    function movePiece(uint gameID,
+                       uint oldX,
+                       uint oldY,
+                       uint newX,
+                       uint newY) 
+                         external {
+      Game storage game = games[gameID];
+      require(game.exists, "game doesn't exist");
+      require(oldX < 10 && oldY < 10 && newX < 10 && newY < 10, "coords not in range");
+      require(game.currPhase == Phase.Gameplay, "cannot move during this game phase");
+      require(msg.sender == game.blue || msg.sender == game.red, "not playing");
+     
+      
+      uint8 oldIdx = coord2Idx(oldX, oldY);
+      uint8 newIdx = coord2Idx(newX, newY);
+      TileType oldTile = coord2Piece(gameID, oldX, oldY);
+      TileType newTile =  coord2Piece(gameID, newX, newY);
+
+      if(msg.sender == game.red){
+        completeMove(game, oldTile, newTile, oldIdx, newIdx, TileType.RedPiece, Team.Red);
+      } else {
+        completeMove(game, oldTile, newTile, oldIdx, newIdx, TileType.BluePiece, Team.Blue);
+      }
+    } 
     
     function printBoard(uint gameID) public view returns (string memory){
       Game storage game = games[gameID];
@@ -142,62 +256,14 @@ contract Stratego {
       }     
       return string(byteString);
     }
-       
-    function battle(uint newX, uint newY) public{
-      
-    }
-    function diff(uint x1, uint x2) private pure returns (uint) {
-      return x1 > x2 ? x1 - x2 : x2 - x1;
-    }
     
-      /**
-      Steps:
-        1. Verify:
-          1. It's the correct person's move
-          2. The original square has a piece of the correct color
-          3. The new square is not blocked
-          4. The move is one square in a cardinal direction
-        2. If it's a battle, battle
-        3. If it's an empty square, update accordingly
-    */
-    
-    function movePiece(uint origX, uint origY, uint newX, uint newY, uint gameID) public {
+    function printPhase(uint gameID) public view returns (string memory) {
       Game storage game = games[gameID];
-      
-      TileType origTile = game.board[coord2Idx(origX, origY)];
-      TileType newTile =  game.board[coord2Idx(newX, newY)];
-            
-      uint diffX = diff(origX, newX);
-      uint diffY = diff(origY, newY);
-      require((diffX == 0 && diffY == 1) || (diffX == 1 && diffY == 0));
-      
-      
-      if(game.turn == Team.Red){
-        require(msg.sender == game.red  && origTile == TileType.RedPiece);
-        require(newTile == TileType.BluePiece || newTile == TileType.Empty);
-
-        if(newTile == TileType.BluePiece){
-          battle(newX, newY);
-          game.turn = Team.Blue;
-          return;
-        }
-        
-        game.board[coord2Idx(newX, newY)] = TileType.RedPiece;
-        game.turn = Team.Blue;
-        return;
-      } 
-      
-      require(msg.sender == game.blue && origTile == TileType.BluePiece);
-      require(newTile == TileType.RedPiece || newTile == TileType.Empty);
-
-       if(newTile == TileType.RedPiece){
-            battle(newX, newY);
-            game.turn = Team.Red;
-            return;
-      }
-          
-          game.board[coord2Idx(newX, newY)] = TileType.BluePiece;
-          game.turn = Team.Red;
-          return;
-    } 
+      if(game.currPhase == Phase.Awaiting) return "Awaiting";
+      if(game.currPhase == Phase.Placement) return "Placement";
+      if(game.currPhase == Phase.Gameplay) return "Gameplay";
+      if(game.currPhase == Phase.Battle) return "Battle";
+      return "Gameover";
+    }
 }
+
