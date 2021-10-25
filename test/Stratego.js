@@ -104,7 +104,7 @@ describe("Stratego", function () {
       })
     });
     
-    describe.only("moving pieces", function() {
+    describe("moving pieces", function() {
       beforeEach(async function () {
         await aliceStratego.place(69, 1);
         await bobStratego.place(69, 1);
@@ -132,6 +132,24 @@ describe("Stratego", function () {
       
       it("move works when move to empty square", async function () {
         await aliceStratego.movePiece(69,3,9,4,9);
+        let board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+        await bobStratego.movePiece(69,6,9,5,9);
+        board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+        await aliceStratego.movePiece(69,4,9,3,9);
+        board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+        await bobStratego.movePiece(69,5,9,5,8);
+        board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+        await aliceStratego.movePiece(69,3,9,4,9);
+        board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+        await bobStratego.movePiece(69,5,8,5,9);
+        board = await aliceStratego.printBoard(69);
+        // printBoard(board);
+
         // let aliceBoard = await aliceStratego.printBoard(69);
         // printBoard(aliceBoard);
       });
@@ -154,6 +172,18 @@ describe("Stratego", function () {
       
       it("Cannot move to taken square", async function () {
         await expect(aliceStratego.movePiece(69,3,2,3,1)).to.be.revertedWith("cannot move there");
+    
+      });
+      
+      it("Cannot move multiple squares", async function() {
+        let board = await aliceStratego.printBoard(69);
+        printBoard(board);
+        await expect(aliceStratego.movePiece(69,3,9,5,9)).to.be.revertedWith("cannot jump squares");
+        await expect(aliceStratego.movePiece(69,3,9,5,9)).to.be.revertedWith("cannot jump squares");
+        await expect(aliceStratego.movePiece(69,3,0,4,1)).to.be.revertedWith("cannot jump squares");
+        await expect(aliceStratego.movePiece(69,3,0,4,4)).to.be.revertedWith("cannot jump squares");
+        await expect(aliceStratego.movePiece(69,3,0,4,9)).to.be.revertedWith("cannot jump squares");
+
       });
       // move works and battle occurs when move to enemy square
       it("Multiple players move and the board updates accordingly", async function () {
@@ -162,15 +192,103 @@ describe("Stratego", function () {
         let aliceBoard = await aliceStratego.printBoard(69);
         printBoard(aliceBoard);
       });
+      it("When a player attacks another player, the gamestate updates to battle", async function () {
+        await aliceStratego.movePiece(69,3,9,4,9);
+        await bobStratego.movePiece(69,6,9,5,9);
+        await expect(aliceStratego.movePiece(69,4,9,5,9))
+          .to.emit(aliceStratego, 'battleSquares')
+          .withArgs(69, 49, 59);
+      });
+      
+      
+      describe("battle", function () {
+        beforeEach(async function () {
+          console.log(await aliceStratego.printPhase(69));
+          await aliceStratego.movePiece(69,3,9,4,9);
+          await bobStratego.movePiece(69,6,9,5,9);
+          await aliceStratego.movePiece(69,4,9,5,9);
+        });
+        
+        it("Piece value is within correct range", async function() {
+          await expect(aliceStratego.battle(69, 100)).to.be.revertedWith("invalid piece value");
+          await expect(aliceStratego.battle(69, -1)).to.be.reverted;
+          await expect(aliceStratego.battle(69, 12)).to.be.revertedWith("invalid piece value");
+          await expect(aliceStratego.battle(69,1))
+          .to.emit(aliceStratego, 'pieceClaimed')
+          .withArgs(69, Alice.address, 1);
+        });
+        it("game must exist", async function () {
+          await expect(aliceStratego.battle(70, 1)).to.be.revertedWith("game doesn't exist");
+        });
+        it("rando cannot battle", async function () {
+          const [Cindy] = await ethers.getSigners();
+          const cindyStratego = stratego.connect(Cindy);
+          await expect(cindyStratego.battle(69,1)).to.be.revertedWith("not playing");
+                 
+        });
+        it("player hasn't already declared battle piece", async function () {
+          await aliceStratego.battle(69,1);
+          await expect(aliceStratego.battle(69, 1)).to.be.revertedWith("already received piece");
+        });
+        it("player hasn't already declared battle piece", async function () {
+          await bobStratego.battle(69,1);
+          await expect(bobStratego.battle(69, 1)).to.be.revertedWith("already received piece");
+        });
+        /*
+          phase is correct
+        */
+        
+        describe.only("resolve battle", function () {          
+          it("1 vs 2", async function() {
+            await aliceStratego.battle(69,1);
+            await expect(bobStratego.battle(69, 2))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Alice.address);
+          })
+          it("1 vs 1", async function() {
+            await aliceStratego.battle(69,1);
+            await expect(bobStratego.battle(69, 1))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, '0x0000000000000000000000000000000000000000');
+          })
+          it("Other standard battles", async function() {
+            await aliceStratego.battle(69,1);
+            await expect(bobStratego.battle(69, 3))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Alice.address);
+          })
+          it("Std Piece vs Bomb", async function() {
+            await aliceStratego.battle(69,1);
+            await expect(bobStratego.battle(69, 10))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Bob.address);
+          })
+      
+          it("Miner vs Bomb", async function() {
+            await aliceStratego.battle(69,8);
+            await expect(bobStratego.battle(69, 10))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Alice.address);
+          })
+          
+          it("1 vs Spy", async function() {
+            await aliceStratego.battle(69,1);
+            await expect(bobStratego.battle(69, 9))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Alice.address);
+          })
+          
+          it("Spy vs 1", async function() {
+            await aliceStratego.battle(69,9);
+            await expect(bobStratego.battle(69, 1))
+            .to.emit(bobStratego, "battleResolved")
+            .withArgs(69, Alice.address);
+          })          
+        });
+      });
     });
-    it("When a player attacks another player, the gamestate updates to battle", async function () {
-      await aliceStratego.movePiece(69,3,9,4,9);
-      await bobStratego.movePiece(69, 6,9,5,9);
-      await expect(aliceStratego.movePiece(69,4,9,5,9))
-        .to.emit(aliceStratego, 'piecesPlaced')
-        .withArgs(69, 49, 59);;
 
-    });
+    
     describe("board tools functionality", function(){
       it("Should convert coords into array index correctly", async function() {
           expect(await stratego.coord2Idx(0, 0)).to.equal(0);
@@ -197,3 +315,8 @@ let printBoard = (board) => {
     console.log(board.substring(i, i+10));
   }
 }
+
+/*
+QUESTIONS
+  SHOULD AN INPUT VALUE ALWAYS BE A uint?
+*/
