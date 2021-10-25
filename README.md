@@ -4,7 +4,7 @@
 
     I want to build a stratego game that is hosted on the blockchain. Players create and join games through Metamask. Rounds occur in real time, and one player cannot view the pieces of the opposing player. When a move occurs, a player must verify that their move is acceptable without revealing what their piece is; in order for this to work, I will use zero-knowledge proofs. I've drawn inspiration for my implementation from Dark Forest, an open-source, real-time incomplete information blockchain game that overcame many of the same challenges this game faces.
 
-## Poker's Core Characteristics
+## Stratego's Core Characteristics
 
     Stratego is a classic board game that has simple rules and some unique characteristics. It is incomplete information, meaning any one player doesn't have access to the full game state during play. A successful player must understand game theory and risk versus reward calculations, as well as a good memory to keep track of which pieces are in which locations. It is a compelling, short-form board game of capture the flag.
 
