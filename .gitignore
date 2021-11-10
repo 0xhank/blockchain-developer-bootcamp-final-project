@@ -1,0 +1,9 @@
+node_modules
+<<<<<<< HEAD
+
+#hardhat files
+cache
+artifacts
+frontend/src/hardhat
+=======
+>>>>>>> 225c247808b788def0fb33fcbf6d51fb0268aceb
