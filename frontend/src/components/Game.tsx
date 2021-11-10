@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { GreeterContext } from "./../hardhat/SymfoniContext";
+import { GreeterContext } from "../hardhat/SymfoniContext";
 import { Board } from './Board'
 import {GameContext} from './Stratego'
 import '../styles/Game.css'; 

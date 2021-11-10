@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GreeterContext } from "./../hardhat/SymfoniContext";
-import { CurrentAddressContext } from "./../hardhat/SymfoniContext";
+import { GreeterContext } from "../hardhat/SymfoniContext";
+import { CurrentAddressContext } from "../hardhat/SymfoniContext";
 import { BigNumber } from "bignumber.js";
 import { Game } from "./Game"
-import '../styles/Stratego.css';
+import '../styles/Stratego.css'
 import {TeamType } from '../constants/constants'
 import GameLogic from "../logic/GameLogic"
 
