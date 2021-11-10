@@ -1,0 +1,15 @@
+.board {
+  backdrop-filter: blur(17px) saturate(95%);
+  -webkit-backdrop-filter: blur(17px) saturate(95%);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: repeat(10, 8vh);
+  grid-template-rows: repeat(10, 8vh);
+  /* background-color: lightblue; */
+  width: 80vh;
+  height: 80vh;
+  padding : 15px;
+  /* border: 2px transparent;
+  border-radius: 1vh ; */
+}

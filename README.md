@@ -1,31 +1,63 @@
-# Consensys Blockchain Bootcamp Final Project: Blockchain Poker
+# Get started
 
-## Problem
+1. Clone the repo and cd into it `git clone https://github.com/symfoni/hardhat-react-boilerplate.git MyProject && cd MyProject`
+2. Install deps with yarn `yarn` or npm `npm install`
+3. Start hardhat `npx hardhat node --watch`
 
-Online poker is hugely popular, but requires players to pay high fees for access to online casinos. Cashing out can take multiple days, and there is often a lack of transparency about shady gambling sites. An open source blockchain poker game would solve many of these issues. Players could buy in instantly with their crypto, maintain anonymity, and not have to pay high fees. There would be complete transparency, giving power to players in an industry that is dominated by centralized casinos.
+![](https://media.giphy.com/media/9l6z9MzXfHX9gKzbvU/giphy.gif)
 
-## Concept Description
+```text
+It runs up a Hardhat node, compile contracts, generates typescript interfaces, creates React context and instantiates your contract instances and factories with frontend provider.
+```
 
-    I want to build a poker game that is hosted on the blockchain. Players buy in to a table through Metamask and play with their actual ETH. Rounds occur in real time, and players don't have access to the game state other than their cards and community cards that everyone can see. Once the game is over, players cash out and their accounts receive tokens equivalent to their final in-game stack. I've drawn inspiration for my implementation from Dark Forest, an open-source, real-time incomplete information blockchain game that overcame many of the same challenges this game faces.
+4. Open up a new terminal
+5. Enter the frontend directory: `cd frontend`
+6. Install dependencies: `npm install`
+7. Import seed phrase in Metamask. The default mnemonic currently used by hardhat is `test test test test test test test test test test test junk`
+  1. Please note that you need to sign out from your current Metamask wallet to import a new one. **Instead of logging out**, you can use a new browser profile to do your Ethereum development:
+  3. Click your profile icon in the top right corner of Chrome (right next to the hamburger menu icon)
+  4. Click "Add"
+  5. Give the profile a name and click "Add"
+  6. In this new browser window, install Metamask and import the keyphrase above
+8. Ensure Metamask RPC is set to `http://localhost:8545` and chainID `31337`.
+9. Start the React app: `npm start`
 
-## Poker's Core Characteristics
+The frontend should open at http://localhost:3000/
 
-    Poker is a classic card game that has simple rules and some unique characteristics. It is incomplete information, meaning any one player doesn't have access to the full game state during play. A successful player must understand game theory and risk versus reward calculations (called pot odds). In addition, incalculable "live tells"-- when players receive information from their opponent unrelated to the cards in play -- influence players to defy the mathematically optimal choice. Finally, poker is typically played for real money, bringing meaning to each hand. These traits make it one of the most difficult games to master and causes every hand of every game to be unique. 
+Because of this default hardhat.config.ts it will first try to connect with an injected provider like Metamask (web3modal package does this).
 
-## Key Technical Challenges
+If nothing found it will try to connect with your hardhat node. On localhost and hardhat nodes it will inject your mnemonic into the frontend so you have a "browser wallet" that can both call and send transactions. NB! Dont ever put a mnemonic with actual value here.
 
-### 1. Zero Knowledge Proofs
+In hardhat.config.ts there is example on how to instruct your hardhat-network to use mnemonic or privatekey.
 
-    In poker, there is always information unavailable to any given player, such as other players' cards and the order of cards in the deck. However, the blockchain's state is available to all other users. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information.
+```ts
+const config: HardhatUserConfig = {
+  react: {
+    providerPriority: ["web3modal", "hardhat"],
+  },
+};
+```
 
-### 2. Real-time execution
+Ensure you are useing RPC to http://localhost:8545.
 
-    An essential aspect of poker is it occurs in real time. Players often have a "shot clock" of time to make a play. Each player makes between one and ten plays, such as folding, calling, betting, or raising each hand. Since every play is stored on the blockchain, it is essential that each transaction is completed in 1-3 seconds and is gasless. This means the game itself must be hosted on a blockchain other than Ethereum, such as Polygon, Loom, or xDai. Perhaps it's possible to begin the game in Ethereum and host in-game transactions in another blockchain.
+You may also need to set the chainID to 31337 if you are useing Hardhat blockchain development node.
 
-### 3. Multiple "tables" capability
+## Invalid nonce.
 
-    A room is a private space on the blockchain that clients can access either with an access code. For multiple games can be played simultaneously, it is necessary for the Dapp to create a room, or in the case of poker, a table, for a new game.
+```bash
+eth_sendRawTransaction
+  Invalid nonce. Expected X but got X.
+```
 
-### 4. Usable front end
+Reset your account in Metamask.
 
-    You can't have a good Dapp without some slick UX!
+# We ❤️ these **Ethereum** projects:
+
+- [Hardhat 👷](https://hardhat.org/)
+- [Hardhat-deploy 🤘](https://hardhat.org/plugins/hardhat-deploy.html)
+- [Typechain 🔌](https://github.com/ethereum-ts/Typechain#readme)
+- [hardhat-typechain 🧙‍♀️](https://hardhat.org/plugins/hardhat-typechain.html)
+- [ethers.js v5 ⺦](https://github.com/ethers-io/ethers.js#readme)
+- [web3modal 💸](https://github.com/Web3Modal/web3modal#web3modal)
+- [ts-morph 🏊‍♂️](https://github.com/dsherret/ts-morph)
+- [@symfoni/hardhat-react 🎻(our own)](https://www.npmjs.com/package/@symfoni/hardhat-react)

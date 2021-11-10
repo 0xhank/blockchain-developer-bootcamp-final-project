@@ -1,0 +1,52 @@
+#Game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  background-color: transparent;
+}
+
+.gameInfo {
+  backdrop-filter: blur(17px) saturate(95%);
+  -webkit-backdrop-filter: blur(17px) saturate(95%);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+  /* border: 1px solid rgba(209, 213, 219, 0.1); */
+  text-align : center;
+  width: 80vh;
+  height : 3vh;
+  display: flex;
+  flex-direction: row;
+  justify-content : space-between;
+  align-items: center;
+  margin: 1vh;
+  padding: 1vh; 
+} 
+
+.titlet {
+  font-size: 20px;
+  font-style: bold;
+  font-weight : bold;
+  color : white;
+}
+
+.confirm-bttn {
+  display: inline-block;
+  padding: 1vh;
+  border: 0;
+  border-radius: 10px;
+  background-color:transparent;
+  border: 1px solid rgba(255,255,255, .7);
+  /* backdrop-filter: blur(30px); */
+  color: rgba(255,255,255);
+  font-size: 14px;
+  cursor: pointer;
+  margin : 1vh;
+}
+
+.confim-bttn:active {
+  cursor : default;
+  background-color: rgba(255,255,255,1);
+  border: 5px solid rgba(255,255,255,0.5);
+}

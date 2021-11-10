@@ -1,0 +1,121 @@
+
+/* TODO: Consider adding a logo */
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.submit-btn {
+  float: right;
+  color: blue;
+  margin: 15px;
+  font-size: 20px;
+}
+
+.text {
+  font-size: 16px;
+  font-style: bold;
+  color : white;
+
+}
+.title {
+  font-size: 20px;
+  font-style: bold;
+  align-self : flex-start;
+  font-weight : bold;
+  color : white;
+}
+.entry-block {
+  backdrop-filter: blur(17px) saturate(95%);
+  -webkit-backdrop-filter: blur(17px) saturate(95%);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.1);
+  width: 40vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 20px;
+}
+
+.input {
+  font-size: max(16px, 1em);
+  font-family: inherit;
+  padding: 0.25em 0.5em;
+  background-color: #fff;
+  border: 2px solid var(--input-border);
+  border-radius: 4px;
+  padding: 10px 10px;
+  border: 0;
+  border-radius: 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  padding: 5px;
+  justify-content: space-around;
+}
+.game-over-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 200px;
+  width: 400px;
+  margin-top: -100px;
+  margin-left: -200px;
+
+  background-color: black;
+  color: white;
+  z-index: 1;
+}
+
+.game-over-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50px;
+  width: 200px;
+  margin-top: -25px;
+  margin-lefT: -100px;
+
+  font-size: 30px;
+}
+
+.confirm-btn {
+  display: inline-block;
+  padding: 10px 10px;
+  border: 0;
+  border-radius: 15px;
+  background-color: rgba(255,255,255,0.01);
+  border: 1px solid rgba(255,255,255,0.01);
+  backdrop-filter: blur(30px);
+  color: rgba(255,255,255);
+  font-size: 14px;
+  cursor: pointer;
+  margin : 10px;
+}
+
+.confim-btn:hover {
+  background-color: rgba(255,255,255,1);
+  border: 5px solid rgba(255,255,255,0.5);
+
+}
+
+.rules-link {
+  color: pink;
+}
