@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { GreeterContext } from "../hardhat/SymfoniContext";
 import { Board } from './Board'
-import {GameContext} from './Stratego'
+import GameLogic from '../logic/GameLogic'
 import '../styles/Game.css'; 
 
 import { TeamType, Piece, numRows, numCols, c2i, i2c, piece2Num, num2Piece } from '../constants/constants' 
@@ -16,9 +16,8 @@ interface Props {
 export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) => {
                                         
   const stratego = useContext(GreeterContext);
-  const game = useContext(GameContext).game;
 
-  const [piecePositions, setPiecePositions] = useState<Map< number, Piece | undefined>>(game.getBoard());
+  const [game, setGame] = useState<GameLogic>(new GameLogic())
   const [possibleMoves, setPossibleMoves] = useState<Set<number>>(new Set());
   const [lastMove, setLastMove] = useState< [number, number][]>();
   const [started, setStarted] = useState<boolean>(false);
@@ -36,15 +35,9 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
   
   useEffect(() => {
     doAsync();
-    setPiecePositions(game.getBoard())
     console.log("new piece positions")
 
-  }, [stratego]);
-  
-  useEffect(() => {
-    setPiecePositions(game.getBoard())
-    
-  }, [game])
+  }, [stratego, game]);
   
   const piecesPlaced = (gameNo : number, redboard : number, blueBoard : number) => {
     if(gameNo.toString() !== gameID) return;
@@ -63,9 +56,11 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     
     console.log(`Piece Moved From ${start} to ${end}`);
     
-    game.movePiece (start, end);
-    game.turn = game.turn === TeamType.RED ? TeamType.BLUE : TeamType.RED;
-
+    let newGame : GameLogic = new GameLogic();
+    newGame = game;
+    newGame.movePiece (start, end);
+    newGame.turn = game.turn === TeamType.RED ? TeamType.BLUE : TeamType.RED;
+    setGame(newGame);
     console.log(`game turn: ${game.turn}`);
     return;
   }
@@ -121,14 +116,12 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
   
   const onClickPiece = (a :  [number, number]) => {
     setPossibleMoves(game.getValidMoves(a));
-    setPiecePositions(game.getBoard());
     setLastMove(game.getLastMove());
   }
   
   const swapPieces = (a :  [number, number], b :  [number, number]) => {
     // console.log(`swap pieces! ${a} with ${b}`);
     game.swapPieces(a,b);
-    setPiecePositions(game.getBoard());
   }
   
   const inv = (num : number) : number => {
@@ -170,7 +163,7 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     {/* {!started ? <p>Set Up Board</p> : <p>Playing Game</p>}
         {started ? game.getTurn() === team ? <p>"Your Turn"</p> : <p>"Opponent's Turn"</p> : null}  */}
     <Board 
-    piecePositions={piecePositions}
+    piecePositions={game.getBoard()}
     possibleMoves={possibleMoves}
     lastMove={lastMove}
     onClickPiece={started ? onClickPiece : () => {}}

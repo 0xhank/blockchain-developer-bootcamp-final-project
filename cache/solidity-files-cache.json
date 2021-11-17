@@ -35,16 +35,16 @@
         "console"
       ]
     },
-    "C:\\Users\\hanke\\OneDrive\\Documents\\github\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
-      "lastModificationDate": 1635069044043,
-      "contentHash": "66cba1975567d046298ed88704010c50",
-      "sourceName": "contracts/Stratego.sol",
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Deck.sol": {
+      "lastModificationDate": 1636552977268,
+      "contentHash": "74375d5e7132a383c36eed5722fa6511",
+      "sourceName": "contracts/Deck.sol",
       "solcConfig": {
         "version": "0.7.3",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 50
           },
           "outputSelection": {
             "*": {
@@ -52,12 +52,148 @@
                 "abi",
                 "evm.bytecode",
                 "evm.deployedBytecode",
-                "evm.methodIdentifiers"
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "Deck"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Greeter.sol": {
+      "lastModificationDate": 1637170654752,
+      "contentHash": "a119bfa38f8cc09bec24a2de1b9590a4",
+      "sourceName": "contracts/Greeter.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "^0.7.0"
+      ],
+      "artifacts": [
+        "Greeter"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\hardhat\\console.sol": {
+      "lastModificationDate": 1637082171324,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
+      "lastModificationDate": 1636552986847,
+      "contentHash": "66cba1975567d046298ed88704010c50",
+      "sourceName": "contracts/Stratego.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -69,6 +205,48 @@
       ],
       "artifacts": [
         "Stratego"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Migrations.sol": {
+      "lastModificationDate": 1636552977269,
+      "contentHash": "bc5d2a325acfd4a12ab9dec54e57b59e",
+      "sourceName": "contracts/Migrations.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "Migrations"
       ]
     }
   }
