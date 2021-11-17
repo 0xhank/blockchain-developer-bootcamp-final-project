@@ -49,9 +49,9 @@ contract Greeter {
     event beginGame(uint gameID, address red, address blue);
     event piecesPlaced(uint gameID, uint blueBoard, uint redBoard);
     event pieceClaimed(uint gameID, address sender, uint8 pieceVal);
-    event makeMove(uint gameID, uint oldIdx, uint newIdx);
+    event makeMove(uint gameID, uint oldIdx, uint newIdx, string hashed);
 
-    event battleSquares(uint gameID, uint oldIdx, uint newIdx);
+    event battleSquares(uint gameID, uint oldIdx, uint newIdx, string hashed);
     event battleResolved(uint gameID, uint attLoc, uint attVal, uint defLoc, uint defVal);
     event logBoard(string boardString);
     event GameIDs(address from, uint gameID);
@@ -260,7 +260,8 @@ contract Greeter {
                           uint8 oldIdx,
                           uint8 newIdx,
                           Tile moverTile,
-                          bool currTurn
+                          bool currTurn,
+                          string memory hashed
                           ) 
                             private {
       require(currTurn == game.turn, "not your turn");
@@ -279,20 +280,21 @@ contract Greeter {
         game.board[oldIdx] = Tile.Empty;
         game.board[newIdx] = moverTile;
         game.turn = !currTurn;
-        emit makeMove(game.gameID, oldIdx, newIdx);
+        emit makeMove(game.gameID, oldIdx, newIdx, hashed);
 
       } else {
         // battle
         game.currPhase = Phase.Battle;
         game.attLoc = oldIdx;
         game.defLoc = newIdx;
-        emit battleSquares(game.gameID, oldIdx, newIdx);
+        emit battleSquares(game.gameID, oldIdx, newIdx, hashed);
       }      
     }
     
     function movePiece(uint gameID,
                        uint8 oldCoord,
-                       uint8 newCoord) 
+                       uint8 newCoord,
+                       string memory hashed) 
                          external {
       Game storage game = games[gameID];
       console.log("oldCoord: %d, newCoord: %d", oldCoord, newCoord);
@@ -302,9 +304,9 @@ contract Greeter {
       require(msg.sender == game.blue || msg.sender == game.red, "not playing");
 
       if(msg.sender == game.red){
-        completeMove(game, oldCoord, newCoord, Tile.Red, false);
+        completeMove(game, oldCoord, newCoord, Tile.Red, false, hashed);
       } else {
-        completeMove(game, oldCoord, newCoord, Tile.Blue, true);
+        completeMove(game, oldCoord, newCoord, Tile.Blue, true, hashed);
       }
     } 
     

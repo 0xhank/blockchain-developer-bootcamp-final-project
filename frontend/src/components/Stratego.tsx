@@ -4,23 +4,10 @@ import { CurrentAddressContext } from "../hardhat/SymfoniContext";
 import { BigNumber } from "bignumber.js";
 import { Game } from "./Game"
 import '../styles/Stratego.css'
-import {TeamType } from '../constants/constants'
-import GameLogic from "../logic/GameLogic"
+import {TeamType } from '../utils/utils'
 
 
-interface Props {}
-
-const defaultGameContext: GameContextInterface = {
-  game : new GameLogic()
-};
-
-export const GameContext = React.createContext<GameContextInterface>(defaultGameContext);
-
-export interface GameContextInterface {
-  game : GameLogic
-}
-
-export const Stratego: React.FC<Props> = () => {
+export const Stratego: React.FC = () => {
   
   const stratego = useContext(GreeterContext);
   const currentAddress = useContext(CurrentAddressContext)[0];
@@ -31,7 +18,7 @@ export const Stratego: React.FC<Props> = () => {
   const [gameID, setGameID] = useState<string>('');
   const [IDstore, setIDstore] = useState<string>('');
   const [team, setTeam] = useState<TeamType>(TeamType.RED);
-
+  
   useEffect(() => {
     console.log(`gameID updated, is now ${gameID}`);
     const doAsync = async () => {
@@ -105,14 +92,12 @@ export const Stratego: React.FC<Props> = () => {
             <p className = "title">{winner === TeamType.RED ? "Red" : "Blue"} wins!</p>
           </div> : 
           newGame ? 
-            <GameContext.Provider value = {{game : new GameLogic()}}>
               <Game
                 gameID = {gameID}
                 startNewGame={newGame}
                 onGameOver={(team : TeamType) => endGame(team)}
                 team={team}
-              />
-            </GameContext.Provider> :
+              /> :
               showGameNo ?  
               <div className="entry-block">
                 <p className = "title">Your game room:</p>

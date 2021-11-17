@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Square.css';
-import { TeamType, Piece } from '../constants/constants'
+import { TeamType, Piece } from '../utils/utils'
 // import one from 'public/images/one.png';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   piece : Piece | undefined,
   onClick : () => void,
   showMoveIndicator : boolean, 
-  showLastMove : boolean | undefined,
+  // showLastMove : boolean | undefined,
   showSelectedPiece : boolean | undefined
 }
 
@@ -25,7 +25,7 @@ export const Square: React.FC<Props> = (
     piece, 
     onClick, 
     showMoveIndicator, 
-    showLastMove, 
+    // showLastMove, 
     showSelectedPiece}) => 
 {
   function prettyPrint(piece : Piece | undefined) : string {
