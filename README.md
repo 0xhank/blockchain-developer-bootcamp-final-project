@@ -1,5 +1,17 @@
 # Consensys Blockchain Bootcamp Final Project: Zero Knowledge Stratego
 
+## How to install and run
+
+1. Clone the repository
+2. npm install the main folder
+3. Spin up a local blockchain using npm run node
+4. In the browser create a new account in Metamask with the mnemonic "test test test test test test test test test test test junk" and choose "Localhost 8545" as the network
+5. In a new terminal, open /frontend
+6. npm install in /frontend
+7. npm start to create a react server on Localhost 3000. You should see the game connect to Metamask and enter the Create/Join screen.
+
+(To test, I typically have two browsers open simultaneously connected to different Metamask accounts that can play vs each other.)
+
 ## Concept Description
 
     I want to build a stratego game that is hosted on the blockchain. Players create and join games through Metamask. Rounds occur in real time, and one player cannot view the pieces of the opposing player. When a move occurs, a player must verify that their move is acceptable without revealing what their piece is; in order for this to work, I will use zero-knowledge proofs. I've drawn inspiration for my implementation from Dark Forest, an open-source, real-time incomplete information blockchain game that overcame many of the same challenges this game faces.
