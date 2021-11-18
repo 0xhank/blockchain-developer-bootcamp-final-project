@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { GreeterContext } from "../hardhat/SymfoniContext";
-import { Board } from './Board'
-import {GameContext} from './Stratego'
-import '../styles/Game.css'; 
 
-import { TeamType, Piece, numRows, numCols, c2i, i2c, piece2Num, num2Piece } from '../constants/constants' 
+import { Board } from './Board'
+import '../styles/Game.css'; 
+import BoardLogic from "../logic/BoardLogic"
+
+import { TeamType,Piece, inv, c2i, i2c, num2Piece, piece2Num } from '../utils/utils' 
 
 interface Props {
   gameID : string,
@@ -13,104 +14,113 @@ interface Props {
   team : TeamType,
 }
 
+
 export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) => {
                                         
   const stratego = useContext(GreeterContext);
-  const game = useContext(GameContext).game;
 
-  const [piecePositions, setPiecePositions] = useState<Map< number, Piece | undefined>>(game.getBoard());
-  const [possibleMoves, setPossibleMoves] = useState<Set<number>>(new Set());
-  const [lastMove, setLastMove] = useState< [number, number][]>();
   const [started, setStarted] = useState<boolean>(false);
-  
-  const doAsync = async () => {
-    console.log("do Async");
-    if(!stratego.instance) return;
-    stratego.instance.on("piecesPlaced", piecesPlaced);
-    stratego.instance.on("makeMove", makeMove);
-    stratego.instance.on("battleSquares", battleSquares);
-    stratego.instance.on("battleResolved", battleResolved);
-    stratego.instance.on("GameoverLog", gameOver);
-    return;
-  };
-  
-  useEffect(() => {
-    doAsync();
-    setPiecePositions(game.getBoard())
-    console.log("new piece positions")
-
-  }, [stratego]);
-  
-  useEffect(() => {
-    setPiecePositions(game.getBoard())
-    
-  }, [game])
-  
-  const piecesPlaced = (gameNo : number, redboard : number, blueBoard : number) => {
+  const [turn, setTurn] = useState<TeamType>(TeamType.RED);
+  // const [winner, setWinner] = useState< TeamType | undefined >(undefined);
+  const [board, setBoard] = useState<BoardLogic>(new BoardLogic());
+  const [possibleMoves, setPossibleMoves] = useState<Set<Piece>>(new Set());
+   
+  const handlePiecesPlaced = useCallback((gameNo : number, redboard : number, blueBoard : number) => {
     if(gameNo.toString() !== gameID) return;
     console.log("Game Started")
     setStarted(true);
-    return;
-  }
+  }, [gameID])
   
-  const makeMove = (gameNo : number, start : number, end : number) => {
+  const handleMove = useCallback((gameNo : number, start : number, end : number, hash : string) => {
+    // console.log("make move,", gameNo);
+    if(gameNo.toString() !== gameID) return;
+
     if(team === TeamType.RED){
       start = inv(start);
       end = inv(end);
     } 
-  
-    if(gameNo.toString() !== gameID) return;
     
     console.log(`Piece Moved From ${start} to ${end}`);
-    
-    game.movePiece (start, end);
-    game.turn = game.turn === TeamType.RED ? TeamType.BLUE : TeamType.RED;
 
-    console.log(`game turn: ${game.turn}`);
-    return;
-  }
-  
-  const battleSquares = (gameNo : number, att : number, def : number) => {        
+    setBoard((prevBoard : BoardLogic) => {
+      prevBoard.movePiece(i2c(start), i2c(end));
+      return prevBoard
+    });
+
+    setTurn((prevTurn : TeamType) => prevTurn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+  }, [board, gameID, team, turn])
+
+
+  const battleSquares = useCallback(async (gameNo : number, att : number, def : number) => {  
     if(gameNo.toString() !== gameID) return;
     console.log(`battle squares : ${att} and ${def}`);
     if(team === TeamType.RED){
       att = inv(att);
       def = inv(def);
     } 
-    let myPiece : Piece | undefined = team === game.turn ? 
-                                                game.getPiece(i2c(att)) :
-                                                game.getPiece(i2c(def));
+    let myPiece : Piece | undefined = board.getPiece(i2c(team === turn ? att : def))
+    
     if(!stratego.instance || !myPiece) return;
     const myNum : number = piece2Num(myPiece);
-    const tx = stratego.instance.battle(gameNo, myNum);
+    // setOppHashes([...oppHashes, hash]);
+
+    alert(`You're ${team === turn ? 'attacking' : 'defending'} with ${myPiece}`)
+    if(!stratego.instance) throw new Error("stratego not ready");
+    const tx = await stratego.instance.battle(gameNo, myNum);
     console.log(tx);
-    return;
-  }
+
+  }, [board, gameID, stratego, team, turn])
   
-  const battleResolved = (gameNo : number,
+  const battleResolved = useCallback((gameNo : number,
     attLoc : number, 
     attVal : number, 
     defLoc : number, 
     defVal : number) => {
     if(gameNo.toString() !== gameID) return;
-      console.log("battleResolved")
-      if(team === TeamType.RED){
-      attLoc = inv(attLoc);
-      defLoc = inv(defLoc);
-      } 
-      console.log(`attLoc: ${attLoc}, attVal : ${num2Piece(attVal)}, defLoc: ${defLoc}, ${num2Piece(defVal)}`)
-      
-      game.setPiece(attLoc, num2Piece(attVal));
-      game.setPiece(defLoc, num2Piece(defVal));
-      game.turn = game.turn === TeamType.RED ? TeamType.BLUE : TeamType.RED;
-  }
-
-  const gameOver = (gameNo : number, winner : boolean) => {
+    console.log("battleResolved")
+    if(team === TeamType.RED){
+    attLoc = inv(attLoc);
+    defLoc = inv(defLoc);
+    } 
+    console.log(`attLoc: ${attLoc}, attVal : ${num2Piece(attVal)}, defLoc: ${defLoc}, ${num2Piece(defVal)}`)
+    
+    setBoard((prevBoard : BoardLogic) => {
+      prevBoard.setPiece(attLoc, num2Piece(attVal));
+      prevBoard.setPiece(defLoc, num2Piece(defVal));
+      return prevBoard
+    });
+    
+    setTurn((prevTurn : TeamType) => prevTurn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+  }, [board, gameID, team, turn])
+  
+  const gameOver = useCallback((gameNo : number, winner : boolean) => {
     console.log("Game Over")
     if(gameNo.toString() !== gameID) return;
     onGameOver(winner ? TeamType.BLUE : TeamType.RED);
-    return;
-  }
+  }, [gameID, onGameOver]);
+  
+  const listen = useCallback(async () => {
+
+    if(!stratego.instance) return;
+    stratego.instance.on("piecesPlaced", handlePiecesPlaced);
+    stratego.instance.on("makeMove", handleMove);
+    stratego.instance.on("battleSquares", battleSquares);
+    stratego.instance.on("battleResolved", await battleResolved);
+    stratego.instance.on("GameoverLog", gameOver);
+    return async () => {
+      stratego.instance.off("piecesPlaced", handlePiecesPlaced);
+    stratego.instance.off("makeMove", handleMove);
+    stratego.instance.off("battleSquares", battleSquares);
+    stratego.instance.off("battleResolved", await battleResolved);
+    stratego.instance.off("GameoverLog", gameOver);
+    };
+  },[ battleResolved, battleSquares, gameOver, handleMove, handlePiecesPlaced, stratego.instance]);
+  
+   useEffect(() => {
+      listen();
+
+    }, [listen]);
+  
   const submitTeam = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   )  => {
@@ -118,31 +128,21 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     if (!stratego.instance) throw Error("Stratego instance not ready");
     await stratego.instance.place(Number(gameID), 1);
   }
-  
+   
   const onClickPiece = (a :  [number, number]) => {
-    setPossibleMoves(game.getValidMoves(a));
-    setPiecePositions(game.getBoard());
-    setLastMove(game.getLastMove());
-  }
-  
-  const swapPieces = (a :  [number, number], b :  [number, number]) => {
-    // console.log(`swap pieces! ${a} with ${b}`);
-    game.swapPieces(a,b);
-    setPiecePositions(game.getBoard());
-  }
-  
-  const inv = (num : number) : number => {
-    return (numCols * numRows) -1 - num;
+    setPossibleMoves(board.getValidMoves(a));
+    // setLastMove(getLastMove());
   }
   
   const movePiece = async (start: [number, number], end : [number, number]) =>  {
     // console.log(`moving ${c2i(start)} to ${c2i(end)}`);
     // console.log(start, end); //  DEBUG
-    if(!game.canMakeMove(start, end) || game.getTurn() !== team){
+    if(!board.isMoveAllowed(start, end) || turn !== team){
       console.log("invalid move");
       setPossibleMoves(new Set());
       return;
     }
+    
     const completeMove = window.confirm("Confirm move");
     setPossibleMoves(new Set());
     
@@ -152,49 +152,29 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     const  startIdx = team === TeamType.RED ? inv(c2i(start)) : c2i(start);
     const  endIdx = team === TeamType.RED ? inv(c2i(end)) : c2i(end);
     
-    let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx);
+    let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx)
     
     console.log(tx);
   }
   
   return (
-    <div id = "Game">
-    <div className = "gameInfo">
-     <p className = "titlet">{!started ? "Set Up Board" : "Playing Game"}</p>
-        <p className = "text">{started ? game.getTurn() === team ? "Your Turn" : "Opponent's Turn" : null} </p>
-        {!started && 
-        <button className="confirm-bttn" onClick= {submitTeam}>
-          Submit Setup
-        </button>}
+      <div id = "Game">
+      <div className = "gameInfo">
+       <p className = "titlet">{!started ? "Set Up Board" : "Playing Game"}</p>
+          <p className = "text">{started ? turn === team ? "Your Turn" : "Opponent's Turn" : null} </p>
+          {!started && 
+          <button className="confirm-bttn" onClick= {submitTeam}>
+            Submit Setup
+          </button>}
+      </div>
+
+      <Board
+        team = {team}
+        pieces = {board.getBoard()}
+        onFirstClick={started ? onClickPiece : () => {}}
+        onSecondClick={started ? movePiece : board.swapPieces}
+        possibleMoves = {possibleMoves}
+      />
     </div>
-    {/* {!started ? <p>Set Up Board</p> : <p>Playing Game</p>}
-        {started ? game.getTurn() === team ? <p>"Your Turn"</p> : <p>"Opponent's Turn"</p> : null}  */}
-    <Board 
-    piecePositions={piecePositions}
-    possibleMoves={possibleMoves}
-    lastMove={lastMove}
-    onClickPiece={started ? onClickPiece : () => {}}
-    onSecondClick={started ? movePiece : swapPieces}
-    team={team}
-  />
-  </div>
-    // <div>
-    
-    // <Board 
-    //   piecePositions={piecePositions}
-    //   possibleMoves={possibleMoves}
-    //   lastMove={lastMove}
-    //   onClickPiece={started ? onClickPiece : () => {}}
-    //   onSecondClick={started ? movePiece : swapPieces}
-    //   team={team}
-    // />
-    // {!started && 
-    // <button className="submit-btn" onClick= {submitTeam}>
-    //   Submit Setup
-    // </button>}
-    // <button className="submit-btn" onClick= {() => setUpdated(updated + 1)}>
-    //   Update
-    // </button>
-  // </div>
   );
 }

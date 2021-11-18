@@ -1,4 +1,8 @@
 {
   "_format": "hh-sol-dbg-1",
-  "buildInfo": "..\\..\\build-info\\b72bb0487b813453cf42d160388fb453.json"
+<<<<<<< HEAD
+  "buildInfo": "..\\..\\build-info\\3cc1868406a34d672a3d9e6d4ecdc991.json"
+=======
+  "buildInfo": "..\\..\\build-info\\aeb1ac6dc7d7c62457c6752d37651696.json"
+>>>>>>> main
 }

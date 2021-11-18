@@ -292,7 +292,8 @@ contract Greeter {
     
     function movePiece(uint gameID,
                        uint8 oldCoord,
-                       uint8 newCoord) 
+                       uint8 newCoord
+                       ) 
                          external {
       Game storage game = games[gameID];
       console.log("oldCoord: %d, newCoord: %d", oldCoord, newCoord);

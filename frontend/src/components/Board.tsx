@@ -1,48 +1,29 @@
 import React, { useState } from 'react';
-import {TeamType, numRows, numCols, c2i, Piece } from '../constants/constants'
+import {TeamType, numRows, numCols, c2i, Piece } from '../utils/utils'
 import '../styles/Board.css'
 import { Square } from './Square'
 
 interface Props {
-  piecePositions : Map< number, Piece | undefined>,
-  possibleMoves : Set<number>,
-  lastMove :  [number, number][] | undefined,
-  onClickPiece : ([i,j] : [number, number]) => void,
+  team : TeamType,
+  pieces : Map<number, Piece | undefined>
+  onFirstClick : ([i,j] : [number, number]) => void,
   onSecondClick : (a : [number, number], b : [number, number]) => void,
-  team : TeamType
+  possibleMoves : Set<Piece>
 }
- 
-export const Board: React.FC<Props> = ({
-  piecePositions,
-  possibleMoves,
-  lastMove,
-  onClickPiece,
-  onSecondClick,
-  team
-}) => {
 
-  const [lastClick, setLastClick] = useState<number[] | null>()
+export const Board: React.FC<Props> = ({team, pieces, possibleMoves, onFirstClick, onSecondClick}) => {
+
+  const [lastClick, setLastClick] = useState<[number,number] | undefined>()
   
   const onClick = ([i,j]: [number, number]) => {
     if (lastClick) {
       const [i1,j1] = lastClick;
       onSecondClick([i1, j1], [i,j]);
-      setLastClick(null)
+      setLastClick(undefined);
     } else {
-      onClickPiece([i,j]);
-      setLastClick([i,j])
+      onFirstClick([i,j]);
+      setLastClick([i,j]);
     }
-  }
-  
-  const isLastMove = (a: [number, number]) => {
-    if (lastMove === null) return false;
-    if (team === TeamType.RED && lastMove?.includes(a)) {
-      return true;
-    }
-    if (team === TeamType.BLUE && lastMove?.includes(a)) {
-      return true;
-    }
-    return false;
   }
 
   const showSelectedPiece = (i : number,j : number) => {
@@ -50,6 +31,7 @@ export const Board: React.FC<Props> = ({
     return lastClick[0] === i && lastClick[1] === j;
   }
 
+  
   let squares = []
 
   for (let i : number = 0; i < numRows; i++) {
@@ -59,10 +41,9 @@ export const Board: React.FC<Props> = ({
         row={i}
         col={j}
         team={team}
-        piece={piecePositions.get(c2i([i,j]))}
+        piece={pieces.get(c2i([i,j]))}
         onClick={() => onClick([i,j])}
         showMoveIndicator={possibleMoves.has(c2i([i,j]))}
-        showLastMove={isLastMove([i,j])}
         showSelectedPiece={showSelectedPiece(i,j)}
       />);
     }
