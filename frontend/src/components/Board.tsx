@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import {TeamType, numRows, numCols, c2i,i2c, inv, Piece, piece2Num, num2Piece } from '../utils/utils'
-import { GreeterContext } from "../hardhat/SymfoniContext";
+import React, { useState } from 'react';
+import {TeamType, numRows, numCols, c2i, Piece } from '../utils/utils'
 import '../styles/Board.css'
 import { Square } from './Square'
 
@@ -13,8 +12,6 @@ interface Props {
 }
 
 export const Board: React.FC<Props> = ({team, pieces, possibleMoves, onFirstClick, onSecondClick}) => {
-
-  const stratego = useContext(GreeterContext);
 
   const [lastClick, setLastClick] = useState<[number,number] | undefined>()
   

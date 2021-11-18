@@ -1,6 +1,5 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { Piece, c2i, numRows, numCols } from '../utils/utils'
-const sha1 = require('sha1')
+// const sha1 = require('sha1')
 export default class BoardLogic {
   // Board is 1-indexed. Row 1 is the red army side.
   pieces :  Map< number, Piece | undefined> = new Map();
@@ -168,10 +167,10 @@ export default class BoardLogic {
     return piece !== undefined && piece !== Piece.BLOCKED && piece !== Piece.ENEMY
   }
   
-  public hashBoard = () : string => {
-    console.log(`type: `)
-    return sha1(JSON.stringify(this.pieces));
-  }
+  // public hashBoard = () : string => {
+  //   console.log(`type: `)
+  //   return sha1(JSON.stringify(this.pieces));
+  // }
   
   // public toString = (pieces : Map < number, Piece | undefined) : string => {
     

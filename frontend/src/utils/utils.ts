@@ -61,7 +61,7 @@ export function piece2Num(piece : Piece) : number {
     case Piece.BOMB : return 10
     case Piece.FLAG : return 11
   }
-  return -1;
+  return 12;
 }
 
 export function num2Piece(num : number) : Piece | undefined {
