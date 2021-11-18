@@ -78,8 +78,13 @@
       ]
     },
     "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Greeter.sol": {
+<<<<<<< HEAD
       "lastModificationDate": 1637173172983,
       "contentHash": "ca9155bc28df2fcc264c00388c6ced2b",
+=======
+      "lastModificationDate": 1637170654752,
+      "contentHash": "a119bfa38f8cc09bec24a2de1b9590a4",
+>>>>>>> main
       "sourceName": "contracts/Greeter.sol",
       "solcConfig": {
         "version": "0.7.3",

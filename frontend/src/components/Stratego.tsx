@@ -6,7 +6,6 @@ import { Game } from "./Game"
 import '../styles/Stratego.css'
 import {TeamType } from '../utils/utils'
 
-
 export const Stratego: React.FC = () => {
   
   const stratego = useContext(GreeterContext);

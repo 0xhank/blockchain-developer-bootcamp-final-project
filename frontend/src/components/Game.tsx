@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { GreeterContext } from "../hardhat/SymfoniContext";
 
 import { Board } from './Board'
-
 import '../styles/Game.css'; 
 import BoardLogic from "../logic/BoardLogic"
 
