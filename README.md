@@ -1,27 +1,36 @@
-# Consensys Blockchain Bootcamp Final Project: Zero Knowledge Stratego
+# Henry Caron's Consensys Blockchain Bootcamp Final Project: Zero Knowledge Stratego
 
-## Concept Description
+## Project Scope
+  Simple two-player game with public game data stored on the blockchain and private piece values stored locally. Commit-reveal protocol ensures cheating is not occurring.
 
-    I want to build a stratego game that is hosted on the blockchain. Players create and join games through Metamask. Rounds occur in real time, and one player cannot view the pieces of the opposing player. When a move occurs, a player must verify that their move is acceptable without revealing what their piece is; in order for this to work, I will use zero-knowledge proofs. I've drawn inspiration for my implementation from Dark Forest, an open-source, real-time incomplete information blockchain game that overcame many of the same challenges this game faces.
+## Deployed Frontend: 
+Play the game with a friend at: 
+```website.com```.
+Make sure that your Metamask is set to Rinkeby.
 
-## Stratego's Core Characteristics
+## Running Locally
 
-    Stratego is a classic board game that has simple rules and some unique characteristics. It is incomplete information, meaning any one player doesn't have access to the full game state during play. A successful player must understand game theory and risk versus reward calculations, as well as a good memory to keep track of which pieces are in which locations. It is a compelling, short-form board game of capture the flag.
+### Prerequisites
+- npm
+- Node.js >= v14.18.1
+- Hardhat
+- React
 
-## Key Technical Challenges
+### Get Started
 
-### 1. Zero Knowledge Proofs
+1. Clone the repo and cd into it ```git clone https://github.com/henryacaron/blockchain-developer-bootcamp-final-project.git Stratego && cd Stratego```
+2. Install deps with yarn ```yarn``` or npm ```npm install```
+3. Spinup hardhat blockchain ```npx hardhat node --watch```
+4. Open a second terminal
+5. Enter frontend dir with ```cd frontend```
+6. Install dependencies ```npm install```
+7. Import seed phrase into throwaway Metamask wallet. Current mnemonic is ```test test test test test test test test test test test junk```
+8. Ensure Metamask RPC is set to ```localhost:8545``` and the chainID is ```31337```
+9. Start React app with ```npm start```
 
-    In stratego, there is always information unavailable to any given player, such as the value of opposing pieces. However, the blockchain's state is available to all other users. Therefore, it will be necessary for my project to incorporate zero knowledge proofs to keep certain elements of the game state hidden from users. Zero knowledge proofs are described as "cryptographic methods that allow someone (the verifier) to validate a claim done by a second party (the prover), without requiring the prover to reveal any underlying information about the claim." By this method, elements of the state can be validated without needing to reveal any actual information.
+## Testing Contract
+Test the contract with ```npx hardhat test```
 
-### 3. Real-time execution
+## Video Example of Game
 
-    An essential aspect of stratego is it occurs in real time. Since every play is stored on the blockchain, it is essential that each transaction is completed in 1-3 seconds and is gasless. This means the game itself must be hosted on a blockchain other than Ethereum, such as Polygon, Loom, or xDai. Perhaps it's possible to begin the game in Ethereum and host in-game transactions in another blockchain.
-
-### 4. Multiple "boards" capability
-
-    A room is a private space on the blockchain that clients can access either with an access code. For multiple games can be played simultaneously, it is necessary for the Dapp to create a room, or in the case of stratego, a board, for a new game.
-
-### 5. Usable front end
-
-    You can't have a good Dapp without some slick UX!
+Watch the game at: https://www.youtube.com/watch?v=dQw4w9WgXcQ

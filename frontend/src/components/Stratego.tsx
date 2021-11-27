@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GreeterContext } from "../hardhat/SymfoniContext";
+import { StrategoContext } from "../hardhat/SymfoniContext";
 import { CurrentAddressContext } from "../hardhat/SymfoniContext";
 import { BigNumber } from "bignumber.js";
 import { Game } from "./Game"
@@ -8,10 +8,10 @@ import {TeamType } from '../utils/utils'
 
 export const Stratego: React.FC = () => {
   
-  const stratego = useContext(GreeterContext);
+  const stratego = useContext(StrategoContext);
   const currentAddress = useContext(CurrentAddressContext)[0];
   
-  const [winner, setWinner] = useState<TeamType | null>(null);
+  const [winner, setWinner] = useState<TeamType | undefined>(undefined);
   const [newGame, setNewGame] = useState<boolean>(false);
   const [showGameNo, setShowGameNo] = useState<boolean>(false);
   const [gameID, setGameID] = useState<string>('');
@@ -50,7 +50,14 @@ export const Stratego: React.FC = () => {
       });
     };
     doAsync();
+    return(() => {
+      if (!stratego.instance) return;
+      stratego.instance.removeAllListeners("beginGame");
+      stratego.instance.removeAllListeners("GameIDs");
+
+    })
   }, [stratego, gameID, currentAddress]); 
+  
 
   const startNewGame = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -81,7 +88,10 @@ export const Stratego: React.FC = () => {
     setShowGameNo(false);
   }
   
-  const endGame = (team : TeamType) => {
+  const endGame = (team : TeamType | undefined) => {
+    if(team === undefined){
+      console.log("no winner");
+    }
     setWinner(team);
   }
 
@@ -94,7 +104,7 @@ export const Stratego: React.FC = () => {
               <Game
                 gameID = {gameID}
                 startNewGame={newGame}
-                onGameOver={(team : TeamType) => endGame(team)}
+                onGameOver={(team : TeamType | undefined) => endGame(team)}
                 team={team}
               /> :
               showGameNo ?  

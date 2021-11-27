@@ -1,44 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\hanke\\OneDrive\\Documents\\github\\blockchain-developer-bootcamp-final-project\\node_modules\\hardhat\\console.sol": {
-      "lastModificationDate": 1633458071413,
-      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
-      "sourceName": "hardhat/console.sol",
-      "solcConfig": {
-        "version": "0.7.3",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "console"
-      ]
-    },
-    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Deck.sol": {
-      "lastModificationDate": 1636552977268,
-      "contentHash": "74375d5e7132a383c36eed5722fa6511",
-      "sourceName": "contracts/Deck.sol",
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Migrations.sol": {
+      "lastModificationDate": 1636552977269,
+      "contentHash": "bc5d2a325acfd4a12ab9dec54e57b59e",
+      "sourceName": "contracts/Migrations.sol",
       "solcConfig": {
         "version": "0.7.3",
         "settings": {
@@ -74,18 +40,13 @@
         ">=0.4.22 <0.9.0"
       ],
       "artifacts": [
-        "Deck"
+        "Migrations"
       ]
     },
-    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Greeter.sol": {
-<<<<<<< HEAD
-      "lastModificationDate": 1637173172983,
-      "contentHash": "ca9155bc28df2fcc264c00388c6ced2b",
-=======
-      "lastModificationDate": 1637170654752,
-      "contentHash": "a119bfa38f8cc09bec24a2de1b9590a4",
->>>>>>> main
-      "sourceName": "contracts/Greeter.sol",
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
+      "lastModificationDate": 1638029429577,
+      "contentHash": "beac52691767d11cc1ded7b23917f255",
+      "sourceName": "contracts/Stratego.sol",
       "solcConfig": {
         "version": "0.7.3",
         "settings": {
@@ -117,13 +78,13 @@
         }
       },
       "imports": [
-        "hardhat/console.sol"
+        "@openzeppelin/contracts/access/AccessControl.sol"
       ],
       "versionPragmas": [
         "^0.7.0"
       ],
       "artifacts": [
-        "Greeter"
+        "Stratego"
       ]
     },
     "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\hardhat\\console.sol": {
@@ -168,10 +129,10 @@
         "console"
       ]
     },
-    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
-      "lastModificationDate": 1636552986847,
-      "contentHash": "66cba1975567d046298ed88704010c50",
-      "sourceName": "contracts/Stratego.sol",
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\@openzeppelin\\contracts\\access\\AccessControl.sol": {
+      "lastModificationDate": 1637082052798,
+      "contentHash": "54eb0b53c109558e8312811342e95bf0",
+      "sourceName": "@openzeppelin/contracts/access/AccessControl.sol",
       "solcConfig": {
         "version": "0.7.3",
         "settings": {
@@ -203,19 +164,21 @@
         }
       },
       "imports": [
-        "hardhat/console.sol"
+        "../utils/EnumerableSet.sol",
+        "../utils/Address.sol",
+        "../utils/Context.sol"
       ],
       "versionPragmas": [
-        ">=0.7.0"
+        ">=0.6.0 <0.8.0"
       ],
       "artifacts": [
-        "Stratego"
+        "AccessControl"
       ]
     },
-    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Migrations.sol": {
-      "lastModificationDate": 1636552977269,
-      "contentHash": "bc5d2a325acfd4a12ab9dec54e57b59e",
-      "sourceName": "contracts/Migrations.sol",
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\@openzeppelin\\contracts\\utils\\EnumerableSet.sol": {
+      "lastModificationDate": 1637082077770,
+      "contentHash": "db7b1afdb2c204e1e52100b79f0c847e",
+      "sourceName": "@openzeppelin/contracts/utils/EnumerableSet.sol",
       "solcConfig": {
         "version": "0.7.3",
         "settings": {
@@ -248,10 +211,94 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.4.22 <0.9.0"
+        ">=0.6.0 <0.8.0"
       ],
       "artifacts": [
-        "Migrations"
+        "EnumerableSet"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\@openzeppelin\\contracts\\utils\\Address.sol": {
+      "lastModificationDate": 1637082055150,
+      "contentHash": "7aa46886ff5abe7515496208a5e2ce5a",
+      "sourceName": "@openzeppelin/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.2 <0.8.0"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
+      "lastModificationDate": 1637082059978,
+      "contentHash": "2adbd82f6d055a4751566d4671512b03",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "Context"
       ]
     }
   }

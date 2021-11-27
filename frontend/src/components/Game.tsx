@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { GreeterContext } from "../hardhat/SymfoniContext";
+import { StrategoContext } from "../hardhat/SymfoniContext";
+import { CurrentAddressContext } from "../hardhat/SymfoniContext";
 
+import sha1 from 'sha1'
 import { Board } from './Board'
 import '../styles/Game.css'; 
 import BoardLogic from "../logic/BoardLogic"
@@ -10,26 +12,30 @@ import { TeamType,Piece, inv, c2i, i2c, num2Piece, piece2Num } from '../utils/ut
 interface Props {
   gameID : string,
   startNewGame : boolean,
-  onGameOver: (team: TeamType) => void,
+  onGameOver: (team: TeamType | undefined) => void,
   team : TeamType,
 }
 
 
 export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) => {
                                         
-  const stratego = useContext(GreeterContext);
+  const stratego = useContext(StrategoContext);
+  const currentAddress = useContext(CurrentAddressContext)[0];
 
   const [started, setStarted] = useState<boolean>(false);
   const [turn, setTurn] = useState<TeamType>(TeamType.RED);
-  // const [winner, setWinner] = useState< TeamType | undefined >(undefined);
+  const [winner, setWinner] = useState< TeamType | undefined >(undefined);
   const [board, setBoard] = useState<BoardLogic>(new BoardLogic());
   const [possibleMoves, setPossibleMoves] = useState<Set<Piece>>(new Set());
-   
-  const handlePiecesPlaced = useCallback((gameNo : number, redboard : number, blueBoard : number) => {
+  const [prevMoves, setPrevMoves] = useState<string[]>([])
+  const [hashes, setHashes] = useState<string[]>([]);
+  
+  const handlePiecesPlaced = useCallback((gameNo : number, redBoard : string, blueBoard : string) => {
     if(gameNo.toString() !== gameID) return;
+    setHashes([team === TeamType.RED ? blueBoard : redBoard])
     console.log("Game Started")
     setStarted(true);
-  }, [gameID])
+  }, [gameID, team])
   
   const handleMove = useCallback((gameNo : number, start : number, end : number, hash : string) => {
     // console.log("make move,", gameNo);
@@ -38,20 +44,28 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     if(team === TeamType.RED){
       start = inv(start);
       end = inv(end);
-    } 
+    }  
     
     console.log(`Piece Moved From ${start} to ${end}`);
+    
+    let newBoard = new BoardLogic();
+    newBoard = board;
+    newBoard.movePiece(i2c(start), i2c(end));
+    setBoard({...board, pieces: newBoard.pieces });
+    if(turn !== team) {
+      console.log(`receiving ${hash}`)
 
-    setBoard((prevBoard : BoardLogic) => {
-      prevBoard.movePiece(i2c(start), i2c(end));
-      return prevBoard
-    });
-
-    setTurn((prevTurn : TeamType) => prevTurn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
-  }, [board, gameID, team, turn])
+      setHashes([...hashes, hash])
+    }
+    console.log(hashes);
+    setTurn(turn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+  }, [board, gameID, team, turn, hashes])
 
 
-  const battleSquares = useCallback(async (gameNo : number, att : number, def : number) => {  
+  const battleSquares = useCallback(async (gameNo : number,
+                                           att : number, 
+                                           def : number,
+                                           hash) => {  
     if(gameNo.toString() !== gameID) return;
     console.log(`battle squares : ${att} and ${def}`);
     if(team === TeamType.RED){
@@ -66,10 +80,12 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
 
     alert(`You're ${team === turn ? 'attacking' : 'defending'} with ${myPiece}`)
     if(!stratego.instance) throw new Error("stratego not ready");
-    const tx = await stratego.instance.battle(gameNo, myNum);
-    console.log(tx);
-
-  }, [board, gameID, stratego, team, turn])
+    await stratego.instance.battle(gameNo, myNum)
+    if(turn !== team) {
+      console.log(`receiving ${hash}`)
+      setHashes([...hashes, hash])
+    }
+  }, [board, gameID, stratego, team, turn, hashes])
   
   const battleResolved = useCallback((gameNo : number,
     attLoc : number, 
@@ -82,51 +98,106 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     attLoc = inv(attLoc);
     defLoc = inv(defLoc);
     } 
-    console.log(`attLoc: ${attLoc}, attVal : ${num2Piece(attVal)}, defLoc: ${defLoc}, ${num2Piece(defVal)}`)
     
-    setBoard((prevBoard : BoardLogic) => {
-      prevBoard.setPiece(attLoc, num2Piece(attVal));
-      prevBoard.setPiece(defLoc, num2Piece(defVal));
-      return prevBoard
+    let attPiece : Piece | undefined;
+    let defPiece : Piece | undefined;
+    
+    if(team === turn){
+      attPiece = num2Piece(Number(attVal));
+      defPiece = Number(defVal) === 0 ?  undefined : Piece.ENEMY;
+    } else {
+      defPiece = num2Piece(Number(defVal));
+      attPiece = Number(attVal) === 0 ? undefined : Piece.ENEMY;
+    }
+    
+    setBoard((prevBoard: BoardLogic) => {
+      prevBoard.setPiece(Number(attLoc), attPiece);
+      prevBoard.setPiece(Number(defLoc), defPiece);
+      return prevBoard;
     });
     
-    setTurn((prevTurn : TeamType) => prevTurn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
-  }, [board, gameID, team, turn])
+    setTurn(turn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+  }, [gameID, team, turn])
   
-  const gameOver = useCallback((gameNo : number, winner : boolean) => {
+  const gameOver = useCallback( async (gameNo : number, winner : boolean) =>  {
     console.log("Game Over")
     if(gameNo.toString() !== gameID) return;
-    onGameOver(winner ? TeamType.BLUE : TeamType.RED);
-  }, [gameID, onGameOver]);
+    setWinner(winner ? TeamType.BLUE : TeamType.RED)
+    // onGameOver(winner ? TeamType.BLUE : TeamType.RED);
+    alert("verify your moves");
+    if(!stratego.instance) throw Error("Stratego instance not ready");
   
-  const listen = useCallback(async () => {
-
-    if(!stratego.instance) return;
-    stratego.instance.on("piecesPlaced", handlePiecesPlaced);
-    stratego.instance.on("makeMove", handleMove);
-    stratego.instance.on("battleSquares", battleSquares);
-    stratego.instance.on("battleResolved", await battleResolved);
-    stratego.instance.on("GameoverLog", gameOver);
-    return async () => {
-      stratego.instance.off("piecesPlaced", handlePiecesPlaced);
-    stratego.instance.off("makeMove", handleMove);
-    stratego.instance.off("battleSquares", battleSquares);
-    stratego.instance.off("battleResolved", await battleResolved);
-    stratego.instance.off("GameoverLog", gameOver);
-    };
-  },[ battleResolved, battleSquares, gameOver, handleMove, handlePiecesPlaced, stratego.instance]);
+    let tx = await stratego.instance.verify(gameID, prevMoves.toString())
+    console.log(tx);
+  }, [gameID, stratego, prevMoves]);
   
-   useEffect(() => {
-      listen();
+  const verify = useCallback((gameNo : number, address : string, oppMoves : string) =>  {
+    console.log("Verifying")
+    if(gameNo.toString() !== gameID || address === currentAddress){
+      console.log("wrong game or address")
+      return;
+    } 
+    
+    let verified : boolean = true;
+    const movesArray : string [] = oppMoves.split(',');
+    console.log(`oppmoves: ${movesArray}`)
+    console.log(`hashes : ${hashes}`);
+    if(movesArray.length !== hashes.length){
+      console.log("wrong array length!");
+      verified = false;
+      return;
+    }
+    for(let i in movesArray){
+      if(sha1(movesArray[i]) !== hashes[i]){
+        console.log(`move ${i} failed`);
+        verified = false;
+      } else {
+        console.log(`move ${i} succeeded`);
+      }
+    }
+    alert(verified ? "Opponent Moves Verified!" : "Opponent Cheated!")
+    onGameOver(winner);  
+  }, [gameID, hashes, currentAddress, onGameOver, winner]);
 
-    }, [listen]);
+/***********************************Use Effects ******************************/
+  useEffect(() => {
+    stratego?.instance?.on("verifyData", verify);
+    return () => {stratego?.instance?.off("verifyData", verify)}
+  }, [verify, stratego]);
+  
+  useEffect(() => {
+    stratego?.instance?.on("piecesPlaced", handlePiecesPlaced);
+    return () => {stratego?.instance?.off("piecesPlaced", handlePiecesPlaced)}
+  }, [handlePiecesPlaced, stratego]);
+  
+  useEffect(() => {
+    stratego?.instance?.on("makeMove", handleMove);
+    return () => {stratego?.instance?.off("makeMove", handleMove)}
+  }, [handleMove, stratego]);
+  
+  useEffect(() => {
+    stratego?.instance?.on("battleSquares", battleSquares);
+    return () => { stratego?.instance?.off("battleSquares", battleSquares)}
+  }, [battleSquares, stratego]);
+  
+  useEffect(() => {
+    stratego?.instance?.on("battleResolved", battleResolved);
+    return () => { stratego?.instance?.off("battleResolved", battleResolved)}
+  }, [battleResolved, stratego]);
+  
+  useEffect(() => {
+    stratego?.instance?.on("GameoverLog", gameOver);
+    return () => {stratego?.instance?.off("GameoverLog", gameOver)};
+  }, [gameOver, stratego]);
   
   const submitTeam = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   )  => {
     e.preventDefault();
     if (!stratego.instance) throw Error("Stratego instance not ready");
-    await stratego.instance.place(Number(gameID), 1);
+    console.log(`sending orig board ${sha1(board.toString())}`)
+    setPrevMoves([board.toString()]);
+    await stratego.instance.place(Number(gameID), sha1(board.toString()));
   }
    
   const onClickPiece = (a :  [number, number]) => {
@@ -152,8 +223,9 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     const  startIdx = team === TeamType.RED ? inv(c2i(start)) : c2i(start);
     const  endIdx = team === TeamType.RED ? inv(c2i(end)) : c2i(end);
     
-    let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx)
-    
+    setPrevMoves([...prevMoves, board.toString()]);
+    console.log(`sending ${sha1(board.toString())}`)
+    let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx, sha1(board.toString()))
     console.log(tx);
   }
   
@@ -164,7 +236,7 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
           <p className = "text">{started ? turn === team ? "Your Turn" : "Opponent's Turn" : null} </p>
           {!started && 
           <button className="confirm-bttn" onClick= {submitTeam}>
-            Submit Setup
+            Submit
           </button>}
       </div>
 

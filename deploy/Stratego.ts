@@ -9,7 +9,7 @@ module.exports = async ({
   console.log(`deploy : ${deploy}, deployer : ${deployer}`)
 
   // the following will only deploy "GenericMetaTxProcessor" if the contract was never deployed or if the code changed since last deployment
-  await deploy("Greeter", {
+  await deploy("Stratego", {
     from: deployer,
     // gas: 4000000,
     // args: ["Greeting set from ./deploy/Greeter.ts"],

@@ -1,5 +1,5 @@
-import { Piece, c2i, numRows, numCols } from '../utils/utils'
-// const sha1 = require('sha1')
+import { Piece, c2i, numRows, numCols, piece2Str } from '../utils/utils'
+
 export default class BoardLogic {
   // Board is 1-indexed. Row 1 is the red army side.
   pieces :  Map< number, Piece | undefined> = new Map();
@@ -167,12 +167,13 @@ export default class BoardLogic {
     return piece !== undefined && piece !== Piece.BLOCKED && piece !== Piece.ENEMY
   }
   
-  // public hashBoard = () : string => {
-  //   console.log(`type: `)
-  //   return sha1(JSON.stringify(this.pieces));
-  // }
+  public toString = () : string => {
+    let ret : string = "";
+    this.pieces.forEach(function(piece, key) {
+      ret = ret + (piece2Str(piece))
+      void(key);
+    })
+    return ret;
+  }
   
-  // public toString = (pieces : Map < number, Piece | undefined) : string => {
-    
-  // }
 }
