@@ -22,6 +22,11 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+ const RINKEBY_API_KEY ="https://rinkeby.infura.io/v3/d1b16f81dcd14905b330afbe8a4f2672"
+ const ROPSTEN_API_KEY ="https://ropsten.infura.io/v3/d1b16f81dcd14905b330afbe8a4f2672"
+
+ const PRIVATE_KEY = "69";
+
 const config: HardhatUserConfig = {
   react: {
     providerPriority: ["web3modal", "hardhat"],
@@ -32,8 +37,16 @@ const config: HardhatUserConfig = {
       inject: false, // optional. If true, it will EXPOSE your mnemonic in your frontend code. Then it would be available as an "in-page browser wallet" / signer which can sign without confirmation.
       accounts: {
         mnemonic: "test test test test test test test test test test test junk", // test test test test test test test test test test test junk
-      },
+      },      
     },
+    ropsten: {
+      url: ROPSTEN_API_KEY,
+      accounts: [PRIVATE_KEY]
+    },
+    rinkeby: {
+      url: RINKEBY_API_KEY,
+      accounts: [PRIVATE_KEY]
+    }
     // hardhat: {
     //   accounts: [
     //     {

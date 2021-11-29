@@ -11,13 +11,12 @@ function App() {
       <div className = "center-container">
       <p> Blockchain Stratego</p>
       <p> By Henry Caron</p>
+      <p>Connect to Ropsten</p>
     </div>
     </div>
-      <div className = "body">
         <Symfoni autoInit={true} >
           <Stratego></Stratego>
         </Symfoni>
-      </div>
     </div>
   );
 }

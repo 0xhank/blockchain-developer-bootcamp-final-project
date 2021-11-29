@@ -1,10 +1,10 @@
 .square {
 
-  width: 8vh;
-  height: 8vh;
+  width: 8;
+  height: 8;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 6vh;
+  background-size: 4.5vh;
   border: 0.1px solid #dfdfdf;
 
 
@@ -19,8 +19,8 @@
 }
 
 .lastMove {
-  width: 8vh;
-  height: 8vh;
+  width: 8;
+  height: 8;
   opacity: 0.5;
   z-index: -2;
   background-color: #d1d6f1;
@@ -30,11 +30,11 @@
 }
 
 .possibleMoves {
-  width: 8vh;
-  height: 8vh;
+  width: 8;
+  height: 8;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 4vh;
+  background-size: 3.5vh;
   opacity: .4;
   box-shadow: inset;
 

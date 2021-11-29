@@ -44,7 +44,7 @@
       ]
     },
     "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\contracts\\Stratego.sol": {
-      "lastModificationDate": 1638029429577,
+      "lastModificationDate": 1638029720966,
       "contentHash": "beac52691767d11cc1ded7b23917f255",
       "sourceName": "contracts/Stratego.sol",
       "solcConfig": {
@@ -85,48 +85,6 @@
       ],
       "artifacts": [
         "Stratego"
-      ]
-    },
-    "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\hardhat\\console.sol": {
-      "lastModificationDate": 1637082171324,
-      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
-      "sourceName": "hardhat/console.sol",
-      "solcConfig": {
-        "version": "0.7.3",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 50
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "console"
       ]
     },
     "C:\\Users\\hanke\\eth\\consensys_bootcamp\\blockchain-developer-bootcamp-final-project\\node_modules\\@openzeppelin\\contracts\\access\\AccessControl.sol": {

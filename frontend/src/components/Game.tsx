@@ -24,17 +24,18 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
 
   const [started, setStarted] = useState<boolean>(false);
   const [turn, setTurn] = useState<TeamType>(TeamType.RED);
-  const [winner, setWinner] = useState< TeamType | undefined >(undefined);
   const [board, setBoard] = useState<BoardLogic>(new BoardLogic());
   const [possibleMoves, setPossibleMoves] = useState<Set<Piece>>(new Set());
   const [prevMoves, setPrevMoves] = useState<string[]>([])
   const [hashes, setHashes] = useState<string[]>([]);
+  const [waiting, setWaiting] = useState<boolean>(false);
   
   const handlePiecesPlaced = useCallback((gameNo : number, redBoard : string, blueBoard : string) => {
     if(gameNo.toString() !== gameID) return;
     setHashes([team === TeamType.RED ? blueBoard : redBoard])
     console.log("Game Started")
     setStarted(true);
+    setWaiting(false);
   }, [gameID, team])
   
   const handleMove = useCallback((gameNo : number, start : number, end : number, hash : string) => {
@@ -59,6 +60,8 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     }
     console.log(hashes);
     setTurn(turn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+    setWaiting(false);
+
   }, [board, gameID, team, turn, hashes])
 
 
@@ -77,10 +80,19 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     if(!stratego.instance || !myPiece) return;
     const myNum : number = piece2Num(myPiece);
     // setOppHashes([...oppHashes, hash]);
+    setWaiting(false);
 
     alert(`You're ${team === turn ? 'attacking' : 'defending'} with ${myPiece}`)
     if(!stratego.instance) throw new Error("stratego not ready");
+    try {
     await stratego.instance.battle(gameNo, myNum)
+    setWaiting(true);
+
+    } catch(e) {
+      alert(`${e ? e.message ? e.message : e.data.message : null}, please try again`)
+
+    }
+    
     if(turn !== team) {
       console.log(`receiving ${hash}`)
       setHashes([...hashes, hash])
@@ -117,18 +129,26 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     });
     
     setTurn(turn === TeamType.RED ? TeamType.BLUE : TeamType.RED)
+    setWaiting(false);
+
   }, [gameID, team, turn])
   
   const gameOver = useCallback( async (gameNo : number, winner : boolean) =>  {
     console.log("Game Over")
     if(gameNo.toString() !== gameID) return;
-    setWinner(winner ? TeamType.BLUE : TeamType.RED)
     // onGameOver(winner ? TeamType.BLUE : TeamType.RED);
     alert("verify your moves");
     if(!stratego.instance) throw Error("Stratego instance not ready");
-  
-    let tx = await stratego.instance.verify(gameID, prevMoves.toString())
-    console.log(tx);
+    try {
+      let tx = await stratego.instance.verify(gameID, prevMoves.toString())
+      setWaiting(true);
+
+      console.log(tx);
+    } catch (e){
+      if(!e) alert("unknown error");
+      else if(e.message) alert(`${e.message}, please try again`)
+      else if(!e.data.message) alert(`${JSON.stringify(e)}, please try again`)
+      else alert(`${e.data.message}, please try again`)    }
   }, [gameID, stratego, prevMoves]);
   
   const verify = useCallback((gameNo : number, address : string, oppMoves : string) =>  {
@@ -156,8 +176,11 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
       }
     }
     alert(verified ? "Opponent Moves Verified!" : "Opponent Cheated!")
-    onGameOver(winner);  
-  }, [gameID, hashes, currentAddress, onGameOver, winner]);
+    onGameOver(turn === TeamType.RED ? TeamType.RED : TeamType.BLUE)
+    setWaiting(false);
+
+    // onGameOver(winner);  
+  }, [gameID, hashes, currentAddress, onGameOver, turn]);
 
 /***********************************Use Effects ******************************/
   useEffect(() => {
@@ -197,7 +220,16 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     if (!stratego.instance) throw Error("Stratego instance not ready");
     console.log(`sending orig board ${sha1(board.toString())}`)
     setPrevMoves([board.toString()]);
+    try{ 
     await stratego.instance.place(Number(gameID), sha1(board.toString()));
+    setWaiting(true);
+
+    } catch (e) {
+      if(!e) alert("unknown error");
+      else if(e.message) alert(`${e.message}, please try again`)
+      else if(!e.data.message) alert(`${JSON.stringify(e)}, please try again`)
+      else alert(`${e.data.message}, please try again`);
+    }
   }
    
   const onClickPiece = (a :  [number, number]) => {
@@ -225,15 +257,25 @@ export const Game: React.FC<Props> = ({gameID, startNewGame, onGameOver, team}) 
     
     setPrevMoves([...prevMoves, board.toString()]);
     console.log(`sending ${sha1(board.toString())}`)
-    let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx, sha1(board.toString()))
-    console.log(tx);
+    try {
+      let tx = await stratego.instance.movePiece(gameID, startIdx, endIdx, sha1(board.toString()))
+      setWaiting(true);
+
+      console.log(tx);
+    } catch (e) {
+      if(!e) alert("unknown error");
+      else if(e.message) alert(`${e.message}, please try again`)
+      else if(!e.data.message) alert(`${JSON.stringify(e)}, please try again`)
+      else alert(`${e.data.message}, please try again`);
+    }
+    
   }
   
   return (
       <div id = "Game">
       <div className = "gameInfo">
        <p className = "titlet">{!started ? "Set Up Board" : "Playing Game"}</p>
-          <p className = "text">{started ? turn === team ? "Your Turn" : "Opponent's Turn" : null} </p>
+          <p className = "text">{started ? waiting ? "Waiting" : turn === team ? "Your Turn" : "Opponent's Turn" : null} </p>
           {!started && 
           <button className="confirm-bttn" onClick= {submitTeam}>
             Submit

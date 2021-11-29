@@ -4,11 +4,10 @@
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   display: grid;
-  grid-template-columns: repeat(10, 8vh);
-  grid-template-rows: repeat(10, 8vh);
+  grid-template-columns: repeat(10, 6.5vh);
+  grid-template-rows: repeat(10, 6.5vh);
   /* background-color: lightblue; */
-  width: 80vh;
-  height: 80vh;
+
   padding : 15px;
   /* border: 2px transparent;
   border-radius: 1vh ; */

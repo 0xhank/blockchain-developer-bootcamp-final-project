@@ -43,6 +43,7 @@
     "frontend": "cd frontend && npm run start"
   },
   "dependencies": {
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "react-dotenv": "^0.1.3"
   }
 }

@@ -84,7 +84,7 @@ export const Square: React.FC<Props> = (
       case Piece.NINE    : return 'nine.png'
       case Piece.FLAG    : return 'flag.png'
       case Piece.BOMB    : return 'bomb.png'
-      case Piece.BLOCKED : return 'barrier.png'
+      case Piece.BLOCKED : return 'mountain.png'
     }
   }
   

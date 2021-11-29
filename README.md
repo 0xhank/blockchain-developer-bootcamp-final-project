@@ -5,8 +5,10 @@
 
 ## Deployed Frontend: 
 Play the game with a friend at: 
-```website.com```.
-Make sure that your Metamask is set to Rinkeby.
+
+https://blockchain-stratego.netlify.app/
+
+Make sure that your Metamask is set to Ropsten.
 
 ## Running Locally
 
