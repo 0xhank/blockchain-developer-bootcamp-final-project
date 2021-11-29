@@ -35,7 +35,7 @@ Test the contract with ```npx hardhat test```
 
 ## Video Example of Game
 
-Watch the game at: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+Watch the game at: https://youtu.be/B4P4yVkCcjE
 
-## Public Key for NFT
+## Public Key for NFT Certification
 0xA3E38e0b958924E078Cc0605CdC4A7f6671aEe84
