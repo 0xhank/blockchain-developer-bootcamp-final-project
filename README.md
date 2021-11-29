@@ -1,7 +1,7 @@
 # Henry Caron's Consensys Blockchain Bootcamp Final Project: Zero Knowledge Stratego
 
 ## Project Scope
-  Simple two-player game with public game data stored on the blockchain and private piece values stored locally. Commit-reveal protocol ensures cheating is not occurring.
+  Simple two-player game with public game data stored on the blockchain and private piece values stored locally. Commit-reveal protocol ensures cheating is not occurring. It's built using the React Hardhat Boilerplate by Symfoni.
 
 ## Deployed Frontend: 
 Play the game with a friend at: 
